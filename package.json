@@ -1,0 +1,34 @@
+{
+  "name": "evento-app",
+  "version": "0.1.0",
+  "description": "A event announcement appplication built with Hono and React.",
+  "author": "Alvin Dennis",
+  "license": "MIT",
+  "homepage": "https://github.com/alvin-dennis/Evento",
+  "workspaces": [
+    "./server",
+    "./client",
+    "./shared"
+  ],
+  "scripts": {
+    "dev:client": "cd client && bun run dev",
+    "dev:server": "cd server && bun run dev",
+    "dev:shared": "cd shared && bun run dev",
+    "dev": "concurrently \"bun run dev:shared\" \"bun run dev:server\" \"bun run dev:client\"",
+    "build:client": "cd client && bun run build",
+    "build:shared": "cd shared && bun run build",
+    "build:server": "cd server && bun run build",
+    "build": "bun run build:shared && bun run build:server && bun run build:client",
+    "postinstall": "bun run build:shared && bun run build:server"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "concurrently": "^9.1.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "hono": "^4.8.3"
+  }
+}
