@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useEvents } from '../contexts/EventContext';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Alert, AlertDescription } from '../components/ui/alert';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEvents } from '@/contexts/EventContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calendar, MapPin, Clock, Tag, Plus, ArrowLeft } from 'lucide-react';
 import styles from '../EventForm.module.css';
 
-const CreateEvent = () => {
+export default function CreateEvent() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -270,5 +270,3 @@ const CreateEvent = () => {
     </div>
   );
 };
-
-export default CreateEventPage;

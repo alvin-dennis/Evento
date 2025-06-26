@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { EventProvider } from './contexts/EventContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -15,15 +15,31 @@ const EventsPage = lazy(() => import('./modules/Events/Base/Events'));
 const CreateEventPage = lazy(() => import('./modules/Events/Create/CreateEvent'));
 const EditEventPage = lazy(() => import('./modules/Events/Edit/EditEvent'));
 
+// Layout component that includes Navbar
+const Layout = () => {
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
+};
+
 function App() {
   const router = createBrowserRouter([
-    { path: "/", element: <HomePage /> },
-    { path: "/login", element: <LoginPage /> },
-    { path: "/signup", element: <SignupPage /> },
-    { path: "/events", element: <EventsPage /> },
-    { path: "/dashboard", element: <ProtectedRoute><DashboardPage /></ProtectedRoute> },
-    { path: "/create-event", element: <ProtectedRoute><CreateEventPage /></ProtectedRoute> },
-    { path: "/edit-event/:id", element: <ProtectedRoute><EditEventPage /></ProtectedRoute> }
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        { path: "/", element: <HomePage /> },
+        { path: "/login", element: <LoginPage /> },
+        { path: "/signup", element: <SignupPage /> },
+        { path: "/events", element: <EventsPage /> },
+        { path: "/dashboard", element: <ProtectedRoute><DashboardPage /></ProtectedRoute> },
+        { path: "/create-event", element: <ProtectedRoute><CreateEventPage /></ProtectedRoute> },
+        { path: "/edit-event/:id", element: <ProtectedRoute><EditEventPage /></ProtectedRoute> }
+      ]
+    }
   ]);
 
   return (
@@ -31,7 +47,6 @@ function App() {
       <EventProvider>
         <div className="App">
           <Suspense fallback={<div className="loading">Loading...</div>}>
-            <Navbar />
             <main>
               <RouterProvider router={router} />
             </main>

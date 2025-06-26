@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation, BrowserRouter } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Alert, AlertDescription } from '../components/ui/alert';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { User, Mail, Lock, UserPlus, ArrowRight } from 'lucide-react';
 import styles from '../Auth.module.css';
 
-export default function SignupPage() {
+export default function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -159,12 +159,4 @@ export default function SignupPage() {
       </div>
     </div>
   );
-};
-
-const SignupPage = () => {
-  return (
-    <BrowserRouter>
-      <SignupPageContent />
-    </BrowserRouter>
-  );
-};
+}

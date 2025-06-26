@@ -1,14 +1,24 @@
 import React from 'react';
-import { Link, useNavigate, useLocation, BrowserRouter } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Calendar, User, LogOut, Plus, Home } from 'lucide-react';
 import styles from './Navbar.module.css';
+import {
+  Navbar, 
+  NavbarBrand, 
+  NavbarContent, 
+  NavbarItem, 
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem
+} from "@heroui/navbar";
 
 function NavbarPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const handleLogout = () => {
     logout();
@@ -17,82 +27,130 @@ function NavbarPage() {
 
   const isActive = (path) => location.pathname === path;
 
-  return (
-    <nav className={styles.navbar}>
-      <div className={styles.container}>
-        <Link to="/" className={styles.logo}>
-          <Calendar className={styles.logoIcon} />
-          <span>EventHub</span>
-        </Link>
+  const menuItems = [
+    { name: "Home", path: "/", icon: Home },
+    { name: "Events", path: "/events", icon: Calendar },
+    ...(user ? [
+      { name: "Dashboard", path: "/dashboard", icon: User },
+      { name: "Create Event", path: "/create-event", icon: Plus }
+    ] : [])
+  ];
 
-        <div className={styles.navLinks}>
-          <Link 
-            to="/" 
-            className={`${styles.navLink} ${isActive('/') ? styles.active : ''}`}
-          >
-            <Home size={18} />
-            Home
+  return (
+    <Navbar onMenuOpenChange={setIsMenuOpen} className={styles.navbar}>
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+        <NavbarBrand>
+          <Link to="/" className={styles.logo}>
+            <Calendar className={styles.logoIcon} />
+            <span>EventHub</span>
           </Link>
-          <Link 
-            to="/events" 
-            className={`${styles.navLink} ${isActive('/events') ? styles.active : ''}`}
-          >
-            <Calendar size={18} />
-            Events
-          </Link>
-          
-          {user ? (
-            <>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavbarItem key={item.path} isActive={isActive(item.path)}>
               <Link 
-                to="/dashboard" 
-                className={`${styles.navLink} ${isActive('/dashboard') ? styles.active : ''}`}
+                to={item.path}
+                className={`${styles.navLink} ${isActive(item.path) ? styles.active : ''}`}
               >
-                <User size={18} />
-                Dashboard
+                <Icon size={18} />
+                {item.name}
               </Link>
-              <Link 
-                to="/create-event" 
-                className={`${styles.navLink} ${isActive('/create-event') ? styles.active : ''}`}
+            </NavbarItem>
+          );
+        })}
+      </NavbarContent>
+
+      <NavbarContent justify="end">
+        {user ? (
+          <>
+            <NavbarItem>
+              <span className={styles.userName}>Welcome, {user.name}</span>
+            </NavbarItem>
+            <NavbarItem>
+              <Button 
+                onClick={handleLogout} 
+                variant="outline" 
+                size="sm"
+                className={styles.logoutBtn}
               >
-                <Plus size={18} />
-                Create Event
-              </Link>
-              <div className={styles.userSection}>
-                <span className={styles.userName}>Welcome, {user.name}</span>
-                <Button 
-                  onClick={handleLogout} 
-                  variant="outline" 
-                  size="sm"
-                  className={styles.logoutBtn}
-                >
-                  <LogOut size={16} />
-                  Logout
-                </Button>
-              </div>
-            </>
-          ) : (
-            <div className={styles.authButtons}>
+                <LogOut size={16} />
+                Logout
+              </Button>
+            </NavbarItem>
+          </>
+        ) : (
+          <>
+            <NavbarItem>
               <Link to="/login">
                 <Button variant="outline" size="sm">Login</Button>
               </Link>
+            </NavbarItem>
+            <NavbarItem>
               <Link to="/signup">
                 <Button size="sm">Sign Up</Button>
               </Link>
-            </div>
-          )}
-        </div>
-      </div>
-    </nav>
+            </NavbarItem>
+          </>
+        )}
+      </NavbarContent>
+
+      <NavbarMenu>
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavbarMenuItem key={item.path}>
+              <Link
+                to={item.path}
+                className={`w-full ${isActive(item.path) ? styles.active : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Icon size={18} />
+                {item.name}
+              </Link>
+            </NavbarMenuItem>
+          );
+        })}
+        {!user && (
+          <>
+            <NavbarMenuItem>
+              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                Login
+              </Link>
+            </NavbarMenuItem>
+            <NavbarMenuItem>
+              <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
+                Sign Up
+              </Link>
+            </NavbarMenuItem>
+          </>
+        )}
+        {user && (
+          <NavbarMenuItem>
+            <Button 
+              onClick={() => {
+                handleLogout();
+                setIsMenuOpen(false);
+              }}
+              variant="outline"
+              size="sm"
+            >
+              <LogOut size={16} />
+              Logout
+            </Button>
+          </NavbarMenuItem>
+        )}
+      </NavbarMenu>
+    </Navbar>
   );
 };
 
-const Navbar = () => {
-  return (
-    <BrowserRouter>
-      <NavbarPage/>
-    </BrowserRouter>
-  );
-};
-
-export default Navbar;
+export default NavbarPage;
 

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation, BrowserRouter } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '../components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
-import styles from '../AuthPage.module.css';
+import styles from '../Auth.module.css';
 
-const LoginPageContent = () => {
+export default function Login () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -121,13 +121,3 @@ const LoginPageContent = () => {
     </div>
   );
 };
-
-const LoginPage = () => {
-  return (
-    <BrowserRouter>
-      <LoginPageContent />
-    </BrowserRouter>
-  );
-};
-
-export default LoginPage;

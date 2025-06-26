@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useEvents } from '../contexts/EventContext';
-import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
-import EventCard from '../components/EventCard';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEvents } from '@/contexts/EventContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import EventCard from '../Events/Common/EventCard';
 import { Plus, Calendar, Users, BarChart3, TrendingUp } from 'lucide-react';
 import styles from './Dashboard.module.css';
 
