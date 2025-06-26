@@ -47,7 +47,6 @@ const DashboardPage = () => {
   return (
     <div className={styles.dashboardPage}>
       <div className={styles.container}>
-        {/* Header */}
         <div className={styles.dashboardHeader}>
           <div className={styles.headerContent}>
             <h1 className={styles.dashboardTitle}>Welcome back, {user.name}!</h1>
@@ -63,7 +62,6 @@ const DashboardPage = () => {
           </Link>
         </div>
 
-        {/* Stats Grid */}
         <div className={styles.statsGrid}>
           {stats.map((stat, index) => (
             <Card key={index} className={`${styles.statCard} ${styles[stat.color]}`}>
@@ -80,7 +78,6 @@ const DashboardPage = () => {
           ))}
         </div>
 
-        {/* Events Sections */}
         {userEvents.length === 0 ? (
           <Card className={styles.emptyStateCard}>
             <CardContent className={styles.emptyState}>
@@ -101,7 +98,6 @@ const DashboardPage = () => {
           </Card>
         ) : (
           <>
-            {/* Upcoming Events */}
             {upcomingEvents.length > 0 && (
               <section className={styles.eventsSection}>
                 <div className={styles.sectionHeader}>
@@ -124,7 +120,6 @@ const DashboardPage = () => {
               </section>
             )}
 
-            {/* Past Events */}
             {pastEvents.length > 0 && (
               <section className={styles.eventsSection}>
                 <div className={styles.sectionHeader}>

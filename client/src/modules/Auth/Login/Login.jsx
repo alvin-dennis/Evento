@@ -26,7 +26,6 @@ export default function Login () {
     const result = login(email, password);
     
     if (result.success) {
-      // Redirect to intended page or dashboard
       const from = location.state?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
     } else {

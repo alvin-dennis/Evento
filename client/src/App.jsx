@@ -15,7 +15,6 @@ const EventsPage = lazy(() => import('./modules/Events/Base/Events'));
 const CreateEventPage = lazy(() => import('./modules/Events/Create/CreateEvent'));
 const EditEventPage = lazy(() => import('./modules/Events/Edit/EditEvent'));
 
-// Layout component that includes Navbar
 const Layout = () => {
   return (
     <>

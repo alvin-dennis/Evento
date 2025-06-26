@@ -52,7 +52,6 @@ const EventsPage = () => {
   return (
     <div className={styles.eventsPage}>
       <div className={styles.container}>
-        {/* Header */}
         <div className={styles.pageHeader}>
           <div className={styles.headerContent}>
             <h1 className={styles.pageTitle}>Discover Events</h1>
@@ -67,7 +66,6 @@ const EventsPage = () => {
           </div>
         </div>
 
-        {/* Search and Filters */}
         <Card className={styles.filtersCard}>
           <CardContent className={styles.filtersContent}>
             <div className={styles.searchContainer}>
@@ -158,7 +156,6 @@ const EventsPage = () => {
           </CardContent>
         </Card>
 
-        {/* Events Grid */}
         {filteredAndSortedEvents.length === 0 ? (
           <Card className={styles.emptyStateCard}>
             <CardContent className={styles.emptyState}>
@@ -188,7 +185,6 @@ const EventsPage = () => {
           </div>
         )}
 
-        {/* Categories Overview */}
         {!searchTerm && !selectedCategory && (
           <section className={styles.categoriesSection}>
             <h2 className={styles.categoriesTitle}>Browse by Category</h2>

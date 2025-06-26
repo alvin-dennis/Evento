@@ -39,7 +39,6 @@ export default function Signup() {
     const result = signup(name, email, password);
     
     if (result.success) {
-      // Redirect to intended page or dashboard
       const from = location.state?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
     } else {

@@ -1,6 +1,5 @@
 @@import 'tailwindcss';
 
-/* Modern Animation Utilities */
 @keyframes fadeInUp {
   from {
     opacity: 0;
