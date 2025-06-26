@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Calendar, ArrowRight, Sparkles, Zap, Globe2, Users } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import styles from '../styles/HomePage.module.css';
+import { useAuth } from '@/contexts/AuthContext';
+import styles from './HomePage.module.css';
 
 const HomePage = () => {
   const { user } = useAuth();

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, Users, Edit, Trash2 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { useEvents } from '../contexts/EventContext';
-import styles from '../styles/EventCard.module.css';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEvents } from '@/contexts/EventContext';
+import styles from './EventCard.module.css';
 
 const EventCard = ({ event, showActions = false, onEdit, onDelete }) => {
   const { user } = useAuth();

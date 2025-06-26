@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useEvents } from '../contexts/EventContext';
 import { Button } from '../components/ui/button';
@@ -9,15 +9,10 @@ import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Alert, AlertDescription } from '../components/ui/alert';
-import { Calendar, MapPin, Clock, Tag, Save, ArrowLeft } from 'lucide-react';
-import styles from '../styles/EventFormPage.module.css';
+import { Calendar, MapPin, Clock, Tag, Plus, ArrowLeft } from 'lucide-react';
+import styles from '../EventForm.module.css';
 
-const EditEventPage = () => {
-  const { id } = useParams();
-  const { user } = useAuth();
-  const { getEventById, updateEvent } = useEvents();
-  const navigate = useNavigate();
-  
+const CreateEvent = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -28,34 +23,15 @@ const EditEventPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [eventNotFound, setEventNotFound] = useState(false);
+  
+  const { user } = useAuth();
+  const { addEvent } = useEvents();
+  const navigate = useNavigate();
 
   const categories = [
     'Technology', 'Design', 'Business', 'Marketing', 'Photography', 
     'Education', 'Health', 'Sports', 'Music', 'Art', 'Other'
   ];
-
-  useEffect(() => {
-    const event = getEventById(id);
-    if (!event) {
-      setEventNotFound(true);
-      return;
-    }
-    
-    if (event.createdBy !== user.id) {
-      navigate('/dashboard');
-      return;
-    }
-
-    setFormData({
-      title: event.title,
-      description: event.description,
-      date: event.date,
-      time: event.time,
-      location: event.location,
-      category: event.category
-    });
-  }, [id, getEventById, user.id, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -113,33 +89,28 @@ const EditEventPage = () => {
       return;
     }
 
+    // Check if date is not in the past
+    const eventDate = new Date(`${formData.date} ${formData.time}`);
+    if (eventDate < new Date()) {
+      setError('Event date and time cannot be in the past');
+      setLoading(false);
+      return;
+    }
+
     try {
-      updateEvent(id, formData);
+      const newEvent = {
+        ...formData,
+        createdBy: user.id
+      };
+      
+      addEvent(newEvent);
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to update event. Please try again.');
+      setError('Failed to create event. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  if (eventNotFound) {
-    return (
-      <div className={styles.eventFormPage}>
-        <div className={styles.container}>
-          <Card className={styles.errorCard}>
-            <CardContent className={styles.errorContent}>
-              <h2>Event Not Found</h2>
-              <p>The event you're looking for doesn't exist or has been deleted.</p>
-              <Button onClick={() => navigate('/dashboard')}>
-                Return to Dashboard
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.eventFormPage}>
@@ -154,9 +125,9 @@ const EditEventPage = () => {
             Back
           </Button>
           <div className={styles.headerContent}>
-            <h1 className={styles.pageTitle}>Edit Event</h1>
+            <h1 className={styles.pageTitle}>Create New Event</h1>
             <p className={styles.pageSubtitle}>
-              Update your event details and save changes
+              Fill in the details below to create your event and start inviting attendees
             </p>
           </div>
         </div>
@@ -164,7 +135,7 @@ const EditEventPage = () => {
         <Card className={styles.formCard}>
           <CardHeader className={styles.formHeader}>
             <div className={styles.formIcon}>
-              <Save size={32} />
+              <Plus size={32} />
             </div>
             <CardTitle className={styles.formTitle}>Event Details</CardTitle>
           </CardHeader>
@@ -198,7 +169,7 @@ const EditEventPage = () => {
                     <Tag size={16} />
                     Category *
                   </Label>
-                  <Select value={formData.category} onValueChange={handleCategoryChange}>
+                  <Select onValueChange={handleCategoryChange}>
                     <SelectTrigger className={styles.formInput}>
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
@@ -288,8 +259,8 @@ const EditEventPage = () => {
                   size="lg"
                   className={styles.submitButton}
                 >
-                  {loading ? 'Updating Event...' : 'Update Event'}
-                  <Save size={18} />
+                  {loading ? 'Creating Event...' : 'Create Event'}
+                  <Plus size={18} />
                 </Button>
               </div>
             </form>
@@ -300,4 +271,4 @@ const EditEventPage = () => {
   );
 };
 
-export default EditEventPage;
+export default CreateEventPage;

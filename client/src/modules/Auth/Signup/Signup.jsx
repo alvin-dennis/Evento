@@ -1,31 +1,47 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation, BrowserRouter } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Alert, AlertDescription } from '../components/ui/alert';
-import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
-import styles from '../styles/AuthPage.module.css';
+import { User, Mail, Lock, UserPlus, ArrowRight } from 'lucide-react';
+import styles from '../Auth.module.css';
 
-const LoginPage = () => {
+export default function SignupPage() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    
     setLoading(true);
 
-    const result = login(email, password);
+    const result = signup(name, email, password);
     
     if (result.success) {
-      navigate('/dashboard');
+      // Redirect to intended page or dashboard
+      const from = location.state?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
     } else {
       setError(result.error);
     }
@@ -39,11 +55,11 @@ const LoginPage = () => {
         <Card className={styles.authCard}>
           <CardHeader className={styles.authHeader}>
             <div className={styles.authIcon}>
-              <LogIn size={32} />
+              <UserPlus size={32} />
             </div>
-            <CardTitle className={styles.authTitle}>Welcome Back</CardTitle>
+            <CardTitle className={styles.authTitle}>Create Account</CardTitle>
             <p className={styles.authSubtitle}>
-              Sign in to your account to continue managing your events
+              Join EventHub and start creating amazing events today
             </p>
           </CardHeader>
           
@@ -55,6 +71,22 @@ const LoginPage = () => {
             )}
             
             <form onSubmit={handleSubmit} className={styles.authForm}>
+              <div className={styles.formGroup}>
+                <Label htmlFor="name" className={styles.formLabel}>
+                  <User size={16} />
+                  Full Name
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your full name"
+                  required
+                  className={styles.formInput}
+                />
+              </div>
+              
               <div className={styles.formGroup}>
                 <Label htmlFor="email" className={styles.formLabel}>
                   <Mail size={16} />
@@ -81,7 +113,23 @@ const LoginPage = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
+                  required
+                  className={styles.formInput}
+                />
+              </div>
+              
+              <div className={styles.formGroup}>
+                <Label htmlFor="confirmPassword" className={styles.formLabel}>
+                  <Lock size={16} />
+                  Confirm Password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your password"
                   required
                   className={styles.formInput}
                 />
@@ -93,24 +141,18 @@ const LoginPage = () => {
                 className={styles.submitButton}
                 size="lg"
               >
-                {loading ? 'Signing In...' : 'Sign In'}
+                {loading ? 'Creating Account...' : 'Create Account'}
                 <ArrowRight size={18} />
               </Button>
             </form>
             
             <div className={styles.authFooter}>
               <p className={styles.authFooterText}>
-                Don't have an account?{' '}
-                <Link to="/signup" className={styles.authLink}>
-                  Create one here
+                Already have an account?{' '}
+                <Link to="/login" className={styles.authLink}>
+                  Sign in here
                 </Link>
               </p>
-            </div>
-            
-            <div className={styles.demoCredentials}>
-              <p className={styles.demoTitle}>Demo Credentials:</p>
-              <p className={styles.demoInfo}>Email: john@example.com</p>
-              <p className={styles.demoInfo}>Password: password123</p>
             </div>
           </CardContent>
         </Card>
@@ -119,4 +161,10 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+const SignupPage = () => {
+  return (
+    <BrowserRouter>
+      <SignupPageContent />
+    </BrowserRouter>
+  );
+};

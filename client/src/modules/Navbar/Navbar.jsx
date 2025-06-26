@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Button } from './ui/button';
+import { Link, useNavigate, useLocation, BrowserRouter } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 import { Calendar, User, LogOut, Plus, Home } from 'lucide-react';
-import styles from '../styles/Navbar.module.css';
+import styles from './Navbar.module.css';
 
-const Navbar = () => {
+function NavbarPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -86,4 +86,13 @@ const Navbar = () => {
   );
 };
 
+const Navbar = () => {
+  return (
+    <BrowserRouter>
+      <NavbarPage/>
+    </BrowserRouter>
+  );
+};
+
 export default Navbar;
+

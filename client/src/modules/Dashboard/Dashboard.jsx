@@ -1,13 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useEvents } from '../contexts/EventContext';
 import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import EventCard from '../components/EventCard';
 import { Plus, Calendar, Users, BarChart3, TrendingUp } from 'lucide-react';
-import styles from '../styles/DashboardPage.module.css';
+import styles from './Dashboard.module.css';
 
 const DashboardPage = () => {
   const { user } = useAuth();

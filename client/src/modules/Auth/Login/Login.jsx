@@ -1,44 +1,34 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import { Link, useNavigate, useLocation, BrowserRouter } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '../components/ui/alert';
-import { User, Mail, Lock, UserPlus, ArrowRight } from 'lucide-react';
-import styles from '../styles/AuthPage.module.css';
+import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
+import styles from '../AuthPage.module.css';
 
-const SignupPage = () => {
-  const [name, setName] = useState('');
+const LoginPageContent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-    
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
-      return;
-    }
-    
     setLoading(true);
 
-    const result = signup(name, email, password);
+    const result = login(email, password);
     
     if (result.success) {
-      navigate('/dashboard');
+      // Redirect to intended page or dashboard
+      const from = location.state?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
     } else {
       setError(result.error);
     }
@@ -52,11 +42,11 @@ const SignupPage = () => {
         <Card className={styles.authCard}>
           <CardHeader className={styles.authHeader}>
             <div className={styles.authIcon}>
-              <UserPlus size={32} />
+              <LogIn size={32} />
             </div>
-            <CardTitle className={styles.authTitle}>Create Account</CardTitle>
+            <CardTitle className={styles.authTitle}>Welcome Back</CardTitle>
             <p className={styles.authSubtitle}>
-              Join EventHub and start creating amazing events today
+              Sign in to your account to continue managing your events
             </p>
           </CardHeader>
           
@@ -68,22 +58,6 @@ const SignupPage = () => {
             )}
             
             <form onSubmit={handleSubmit} className={styles.authForm}>
-              <div className={styles.formGroup}>
-                <Label htmlFor="name" className={styles.formLabel}>
-                  <User size={16} />
-                  Full Name
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your full name"
-                  required
-                  className={styles.formInput}
-                />
-              </div>
-              
               <div className={styles.formGroup}>
                 <Label htmlFor="email" className={styles.formLabel}>
                   <Mail size={16} />
@@ -110,23 +84,7 @@ const SignupPage = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a password"
-                  required
-                  className={styles.formInput}
-                />
-              </div>
-              
-              <div className={styles.formGroup}>
-                <Label htmlFor="confirmPassword" className={styles.formLabel}>
-                  <Lock size={16} />
-                  Confirm Password
-                </Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your password"
+                  placeholder="Enter your password"
                   required
                   className={styles.formInput}
                 />
@@ -138,18 +96,24 @@ const SignupPage = () => {
                 className={styles.submitButton}
                 size="lg"
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {loading ? 'Signing In...' : 'Sign In'}
                 <ArrowRight size={18} />
               </Button>
             </form>
             
             <div className={styles.authFooter}>
               <p className={styles.authFooterText}>
-                Already have an account?{' '}
-                <Link to="/login" className={styles.authLink}>
-                  Sign in here
+                Don't have an account?{' '}
+                <Link to="/signup" className={styles.authLink}>
+                  Create one here
                 </Link>
               </p>
+            </div>
+            
+            <div className={styles.demoCredentials}>
+              <p className={styles.demoTitle}>Demo Credentials:</p>
+              <p className={styles.demoInfo}>Email: john@example.com</p>
+              <p className={styles.demoInfo}>Password: password123</p>
             </div>
           </CardContent>
         </Card>
@@ -158,4 +122,12 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+const LoginPage = () => {
+  return (
+    <BrowserRouter>
+      <LoginPageContent />
+    </BrowserRouter>
+  );
+};
+
+export default LoginPage;

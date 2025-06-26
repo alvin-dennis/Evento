@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { useEvents } from '../contexts/EventContext';
-import { Card, CardContent } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Badge } from '../components/ui/badge';
-import EventCard from '../components/EventCard';
+import { useEvents } from '@/contexts/EventContext';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import EventCard from '../Common/EventCard';
 import { Search, Filter, Calendar, SortAsc, SortDesc, X } from 'lucide-react';
-import styles from '../styles/EventsPage.module.css';
+import styles from './Events.module.css';
 
 const EventsPage = () => {
   const { events } = useEvents();
