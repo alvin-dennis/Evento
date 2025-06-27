@@ -52,7 +52,6 @@ export default function CreateEvent() {
     setError('');
     setLoading(true);
 
-    // Validation
     if (!formData.title.trim()) {
       setError('Event title is required');
       setLoading(false);
@@ -89,7 +88,6 @@ export default function CreateEvent() {
       return;
     }
 
-    // Check if date is not in the past
     const eventDate = new Date(`${formData.date} ${formData.time}`);
     if (eventDate < new Date()) {
       setError('Event date and time cannot be in the past');

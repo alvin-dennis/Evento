@@ -8,7 +8,7 @@ import EventCard from '../Events/Common/EventCard';
 import { Plus, Calendar, Users, BarChart3, TrendingUp } from 'lucide-react';
 import styles from './Dashboard.module.css';
 
-const DashboardPage = () => {
+export default function Dashboard() {
   const { user } = useAuth();
   const { getUserEvents } = useEvents();
   
@@ -147,5 +147,3 @@ const DashboardPage = () => {
     </div>
   );
 };
-
-export default DashboardPage;

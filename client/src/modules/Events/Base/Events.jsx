@@ -9,7 +9,7 @@ import EventCard from '../Common/EventCard';
 import { Search, Filter, Calendar, SortAsc, SortDesc, X } from 'lucide-react';
 import styles from './Events.module.css';
 
-const EventsPage = () => {
+export default function Events() {
   const { events } = useEvents();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -211,5 +211,3 @@ const EventsPage = () => {
     </div>
   );
 };
-
-export default EventsPage;

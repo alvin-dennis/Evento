@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calendar, MapPin, Clock, Tag, Save, ArrowLeft } from 'lucide-react';
 import styles from '../EventForm.module.css';
 
-const EditEventPage = () => {
+export default function EditEvent() {
   const { id } = useParams();
   const { user } = useAuth();
   const { getEventById, updateEvent } = useEvents();
@@ -76,7 +76,6 @@ const EditEventPage = () => {
     setError('');
     setLoading(true);
 
-    // Validation
     if (!formData.title.trim()) {
       setError('Event title is required');
       setLoading(false);
@@ -299,5 +298,3 @@ const EditEventPage = () => {
     </div>
   );
 };
-
-export default EditEventPage;

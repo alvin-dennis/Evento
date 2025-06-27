@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEvents } from '@/contexts/EventContext';
 import styles from './EventCard.module.css';
 
-const EventCard = ({ event, showActions = false, onEdit, onDelete }) => {
+export default function EventCard({ event, showActions = false, onEdit, onDelete }) {
   const { user } = useAuth();
   const { deleteEvent } = useEvents();
 
@@ -91,5 +91,3 @@ const EventCard = ({ event, showActions = false, onEdit, onDelete }) => {
     </Card>
   );
 };
-
-export default EventCard;

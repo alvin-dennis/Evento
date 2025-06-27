@@ -5,12 +5,11 @@ import { Calendar, ArrowRight, Sparkles, Zap, Globe2, Users } from 'lucide-react
 import { useAuth } from '@/contexts/AuthContext';
 import styles from './HomePage.module.css';
 
-const HomePage = () => {
+export default function HomePage() {
   const { user } = useAuth();
 
   return (
     <div className={styles.homePage}>
-      {/* Animated Background */}
       <div className={styles.backgroundAnimation}>
         <div className={styles.gradientOrb1}></div>
         <div className={styles.gradientOrb2}></div>
@@ -26,18 +25,15 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Hero Section */}
       <section className={styles.heroSection}>
         <div className={styles.heroContainer}>
           <div className={styles.heroContent}>
-            {/* Badge */}
             <div className={styles.heroBadge}>
               <Sparkles size={16} />
               <span>The Future of Event Discovery</span>
               <div className={styles.badgeGlow}></div>
             </div>
 
-            {/* Main Title */}
             <h1 className={styles.heroTitle}>
               <span className={styles.titleLine1}>Discover</span>
               <span className={styles.titleLine2}>
@@ -46,14 +42,12 @@ const HomePage = () => {
               <span className={styles.titleLine3}>Near You</span>
             </h1>
 
-            {/* Subtitle */}
             <p className={styles.heroSubtitle}>
               Join the next generation of event discovery. Connect with like-minded people, 
               explore incredible experiences, and create unforgettable memories with our 
               AI-powered event platform.
             </p>
 
-            {/* Stats */}
             <div className={styles.heroStats}>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>10K+</div>
@@ -71,7 +65,6 @@ const HomePage = () => {
               </div>
             </div>
 
-            {/* CTA Buttons */}
             <div className={styles.heroButtons}>
               <Link to="/events">
                 <Button size="lg" className={styles.primaryButton}>
@@ -92,7 +85,6 @@ const HomePage = () => {
               )}
             </div>
 
-            {/* Feature Icons */}
             <div className={styles.featureIcons}>
               <div className={styles.featureIcon}>
                 <Globe2 size={24} />
@@ -109,7 +101,6 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Hero Visual */}
           <div className={styles.heroVisual}>
             <div className={styles.visualContainer}>
               <div className={styles.mainCard}>
@@ -173,5 +164,3 @@ const HomePage = () => {
     </div>
   );
 };
-
-export default HomePage;

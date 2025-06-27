@@ -1,28 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Calendar, User, LogOut, Plus, Home } from 'lucide-react';
+import { Calendar, User, LogOut, Plus, Home, Menu, X } from 'lucide-react';
 import styles from './Navbar.module.css';
-import {
-  Navbar, 
-  NavbarBrand, 
-  NavbarContent, 
-  NavbarItem, 
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem
-} from "@heroui/navbar";
 
-function NavbarPage() {
+export default function NavigationBar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
     navigate('/');
+    setIsMenuOpen(false);
   };
 
   const isActive = (path) => location.pathname === path;
@@ -36,121 +37,151 @@ function NavbarPage() {
     ] : [])
   ];
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} className={styles.navbar}>
-      <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
-        />
-        <NavbarBrand>
-          <Link to="/" className={styles.logo}>
-            <Calendar className={styles.logoIcon} />
-            <span>EventHub</span>
+    <>
+      <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
+        <div className={styles.container}>
+          {/* Logo */}
+          <Link to="/" className={styles.logo} onClick={handleLinkClick}>
+            <div className={styles.logoIcon}>
+              <Calendar size={24} />
+            </div>
+            <span className={styles.logoText}>Evento</span>
           </Link>
-        </NavbarBrand>
-      </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavbarItem key={item.path} isActive={isActive(item.path)}>
-              <Link 
-                to={item.path}
-                className={`${styles.navLink} ${isActive(item.path) ? styles.active : ''}`}
-              >
-                <Icon size={18} />
-                {item.name}
-              </Link>
-            </NavbarItem>
-          );
-        })}
-      </NavbarContent>
+          {/* Desktop Navigation */}
+          <div className={styles.desktopNav}>
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`${styles.navLink} ${isActive(item.path) ? styles.active : ''}`}
+                  onClick={handleLinkClick}
+                >
+                  <Icon size={18} />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
 
-      <NavbarContent justify="end">
-        {user ? (
-          <>
-            <NavbarItem>
-              <span className={styles.userName}>Welcome, {user.name}</span>
-            </NavbarItem>
-            <NavbarItem>
-              <Button 
-                onClick={handleLogout} 
-                variant="outline" 
-                size="sm"
-                className={styles.logoutBtn}
-              >
-                <LogOut size={16} />
-                Logout
-              </Button>
-            </NavbarItem>
-          </>
-        ) : (
-          <>
-            <NavbarItem>
-              <Link to="/login">
-                <Button variant="outline" size="sm">Login</Button>
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link to="/signup">
-                <Button size="sm">Sign Up</Button>
-              </Link>
-            </NavbarItem>
-          </>
-        )}
-      </NavbarContent>
+          {/* Auth Section */}
+          <div className={styles.authSection}>
+            {user ? (
+              <div className={styles.userSection}>
+                <div className={styles.userInfo}>
+                  <div className={styles.avatar}>
+                    {user.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className={styles.userName}>{user.name}</span>
+                </div>
+                <Button 
+                  onClick={handleLogout} 
+                  variant="outline" 
+                  size="sm"
+                  className={styles.logoutBtn}
+                >
+                  <LogOut size={16} />
+                  <span className={styles.btnText}>Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <div className={styles.authButtons}>
+                <Link to="/login">
+                  <Button variant="outline" size="sm" className={styles.loginBtn}>
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button size="sm" className={styles.signupBtn}>
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
 
-      <NavbarMenu>
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavbarMenuItem key={item.path}>
-              <Link
-                to={item.path}
-                className={`w-full ${isActive(item.path) ? styles.active : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Icon size={18} />
-                {item.name}
-              </Link>
-            </NavbarMenuItem>
-          );
-        })}
-        {!user && (
-          <>
-            <NavbarMenuItem>
-              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                Login
-              </Link>
-            </NavbarMenuItem>
-            <NavbarMenuItem>
-              <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                Sign Up
-              </Link>
-            </NavbarMenuItem>
-          </>
-        )}
-        {user && (
-          <NavbarMenuItem>
-            <Button 
-              onClick={() => {
-                handleLogout();
-                setIsMenuOpen(false);
-              }}
-              variant="outline"
-              size="sm"
-            >
-              <LogOut size={16} />
-              Logout
-            </Button>
-          </NavbarMenuItem>
-        )}
-      </NavbarMenu>
-    </Navbar>
+          {/* Mobile Menu Toggle */}
+          <button 
+            className={styles.menuToggle}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        <div className={`${styles.mobileMenuOverlay} ${isMenuOpen ? styles.open : ''}`}>
+          <div className={styles.mobileMenu}>
+            <div className={styles.mobileMenuContent}>
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`${styles.mobileNavLink} ${isActive(item.path) ? styles.active : ''}`}
+                    onClick={handleLinkClick}
+                  >
+                    <Icon size={20} />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
+              
+              <div className={styles.mobileDivider} />
+              
+              {user ? (
+                <div className={styles.mobileUserSection}>
+                  <div className={styles.mobileUserInfo}>
+                    <div className={styles.avatar}>
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <span>Welcome, {user.name}</span>
+                  </div>
+                  <Button 
+                    onClick={handleLogout} 
+                    variant="outline" 
+                    className={styles.mobileLogoutBtn}
+                  >
+                    <LogOut size={18} />
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className={styles.mobileAuthButtons}>
+                  <Link to="/login" onClick={handleLinkClick}>
+                    <Button variant="outline" className={styles.mobileLoginBtn}>
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/signup" onClick={handleLinkClick}>
+                    <Button className={styles.mobileSignupBtn}>
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      {/* Mobile Menu Backdrop */}
+      {isMenuOpen && (
+        <div 
+          className={styles.backdrop} 
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+    </>
   );
-};
-
-export default NavbarPage;
+}
 
