@@ -1,4 +1,3 @@
-
 # Evento
 
 > A modern event management platform — manage, share, and track events with ease. Supports frontend and backend workflows with strict type checking and linting for quality.
@@ -88,12 +87,9 @@ ruff check .
 
 # Auto-fix issues with Ruff
 ruff check . --fix
-
-# Run tests
-pytest
 ```
 
-### Full Validation (Client + Server)
+### Full Validation
 
 ```bash
 # Root folder
@@ -105,7 +101,6 @@ bun typecheck
 # Server
 cd ../server
 ruff check .
-pytest
 ```
 
 ---
@@ -155,7 +150,7 @@ ruff check .
 1. Fork repository
 2. Create feature branch: `git checkout -b feat/amazing-feature`
 3. Make changes following code style
-4. Run full validation (client + server)
+4. Run full validation of the respective codebase
 5. Return to root for pushing the commit
 6. Commit: `git commit -m "feat: add amazing feature"`
 7. Push: `git push origin feat/amazing-feature`
