@@ -1,93 +1,111 @@
-# DropaLink
 
-> A modern, minimal link-sharing platform for private, one-time, and expiring links — giving you complete control over how, when, and who views your content.
+# Evento
+
+> A modern event management platform — manage, share, and track events with ease. Supports frontend and backend workflows with strict type checking and linting for quality.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - **Node.js** 18.17+
-- **bun** 8.0+ ([Install](https://bun.io/installation))
+- **bun** 8.0+ ([Install](https://bun.sh/installation))
+- **Python** 3.11+
+- **uv** (for backend dependencies)
+- **FastAPI** (for backend)
+- **Ruff** (Python linting)
 
 ### Setup
 
 ```bash
 # Clone repository
-git clone https://github.com/alvin-dennis/DropaLink.git
-cd DropaLink
+git clone https://github.com/alvin-dennis/Evento.git
+cd Evento
 
-# Install dependencies
+# --- Client setup ---
+cd client
 bun install
-
-# Configure environment
 cp .env.example .env
 
-# Start development server
-bun dev
+# --- Server setup ---
+cd ../server
+uv install
+cp .env.example .env
+
+# Back to root for pushing the commit
+cd ..
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+### Run Development Servers
+
+```bash
+# Frontend (client)
+cd client
+bun dev
+# Open http://localhost:3000
+
+# Backend (server) in a separate terminal
+cd ../server
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Open http://localhost:8000/docs
+```
+
+---
 
 ## 📦 Available Commands
 
-### Development
+### Client (Frontend)
 
 ```bash
-# Start development server with hot reload
+cd client
+
+# Development
 bun dev
 
-```
-
-### Building & Deployment
-
-```bash
-# Create production build
+# Build for production
 bun build
-
-# Start production server
 bun start
 
-# Build and start
-bun build && bun start
+# Linting & formatting
+bun lint          # Biome linter
+bun lint:fix      # Auto-fix
+bun format        # Format code
+bun validate      # Run all checks
+
+# Type checking
+bun typecheck
 ```
 
-### Code Quality
+### Server (Backend)
 
 ```bash
-# Run Biome linter
-bun lint
+cd server
 
-# Fix linting issues automatically
-bun lint:fix
+# Run FastAPI development server
+uvicorn main:app --reload
 
-# Format code with Biome
-bun format
+# Lint with Ruff
+ruff check .
 
-# Run all checks
+# Auto-fix issues with Ruff
+ruff check . --fix
+
+# Run tests
+pytest
+```
+
+### Full Validation (Client + Server)
+
+```bash
+# Root folder
+# Client
+cd client
 bun validate
-```
-
-### Type Checking
-
-```bash
-# Check TypeScript types
 bun typecheck
 
-# Alias
-bun type-check
-```
-
-### Maintenance
-
-```bash
-# Clean build artifacts
-bun clean
-
-# Install git hooks
-bun prepare
-
-# Install dependencies
-bun install
+# Server
+cd ../server
+ruff check .
+pytest
 ```
 
 ---
@@ -96,62 +114,51 @@ bun install
 
 ### Environment Variables
 
-Create `.env.local` in project root:
+**Client (`client/.env`)**
 
 ```env
 NODE_ENV=development
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-or-anon-key
-
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-## 👨‍💻 Development
+**Server (`server/.env`)**
 
-### Quality Checks
-
-**Before Committing**
-
-```bash
-# Run full validation
-bun validate
-
-# Fix auto-fixable issues
-bun lint:fix
-bun format
-
-# Type check
-bun typecheck
+```env
+PYTHON_ENV=development
+DATABASE_URL=postgresql://user:password@localhost:5432/evento
+SECRET_KEY=super-secret-key
 ```
 
 ---
 
-## 🤝 Contributing
+## 👨‍💻 Development Workflow
 
-### Workflow
+### Quality Checks
+
+Before committing or pushing:
+
+```bash
+# Client
+cd client
+bun validate
+bun lint:fix
+bun format
+bun typecheck
+
+# Server
+cd ../server
+ruff check .
+```
+
+### Git Workflow
 
 1. Fork repository
 2. Create feature branch: `git checkout -b feat/amazing-feature`
 3. Make changes following code style
-4. Run `bun validate`
-5. Commit: `git commit -m "feat: add amazing feature"`
-6. Push: `git push origin feat/amazing-feature`
-7. Create Pull Request
-
-### Before Submitting
-
-```bash
-# Validate everything
-bun validate
-
-# Fix issues
-bun lint:fix
-bun format
-
-# Type check
-bun typecheck
-
-# Build test
-bun build
-```
+4. Run full validation (client + server)
+5. Return to root for pushing the commit
+6. Commit: `git commit -m "feat: add amazing feature"`
+7. Push: `git push origin feat/amazing-feature`
+8. Create Pull Request
 
 ---
