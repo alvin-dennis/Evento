@@ -1,0 +1,53 @@
+#!/bin/sh
+
+echo "🔍 Running pre-commit checks..."
+
+check_client() {
+  if [ -d "client" ]; then
+    echo "📂 Checking client..."
+    cd client || exit 1
+
+    if [ -f "package-lock.json" ] || [ -f "yarn.lock" ] || [ -f "pnpm-lock.yaml" ]; then
+      echo "❌ ERROR: Wrong package manager detected in client!"
+      echo "This project uses bun. Please remove package-lock.json, yarn.lock, or pnpm-lock.yaml"
+      echo "and use 'bun install' instead."
+      exit 1
+    fi
+
+    bunx lint-staged || exit 1
+
+    cd ..
+  else
+    echo "⚠️ Client folder not found, skipping client checks."
+  fi
+}
+
+check_server() {
+  if [ -d "server" ]; then
+    echo "📂 Checking server..."
+    cd server || exit 1
+
+    ruff check . || exit 1
+
+    cd ..
+  else
+    echo "⚠️ Server folder not found, skipping server checks."
+  fi
+}
+
+check_client &
+PID_CLIENT=$!
+check_server &
+PID_SERVER=$!
+
+wait $PID_CLIENT
+STATUS_CLIENT=$?
+wait $PID_SERVER
+STATUS_SERVER=$?
+
+if [ $STATUS_CLIENT -ne 0 ] || [ $STATUS_SERVER -ne 0 ]; then
+  echo "❌ Pre-commit checks failed!"
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed!"

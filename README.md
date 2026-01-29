@@ -1,62 +1,157 @@
-# evento
+# DropaLink
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, Hono, ORPC, and more.
+> A modern, minimal link-sharing platform for private, one-time, and expiring links — giving you complete control over how, when, and who views your content.
 
-## Features
+## 🚀 Quick Start
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Router** - File-based routing with full type safety
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **shadcn/ui** - Reusable UI components
-- **Hono** - Lightweight, performant server framework
-- **oRPC** - End-to-end type-safe APIs with OpenAPI integration
-- **workers** - Runtime environment
-- **Biome** - Linting and formatting
-- **PWA** - Progressive Web App support
-- **Turborepo** - Optimized monorepo build system
+### Prerequisites
 
-## Getting Started
+- **Node.js** 18.17+
+- **bun** 8.0+ ([Install](https://bun.io/installation))
 
-First, install the dependencies:
+### Setup
 
 ```bash
+# Clone repository
+git clone https://github.com/alvin-dennis/DropaLink.git
+cd DropaLink
+
+# Install dependencies
 bun install
-```
 
+# Configure environment
+cp .env.example .env
 
-Then, run the development server:
-
-```bash
+# Start development server
 bun dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
-The API is running at [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## 📦 Available Commands
 
+### Development
 
-
-
-## Deployment (Cloudflare Wrangler)
-- Server dev: cd apps/server && bun dev
-- Server deploy: cd apps/server && bun deploy
-
-
-## Project Structure
+```bash
+# Start development server with hot reload
+bun dev
 
 ```
-evento/
-├── apps/
-│   ├── web/         # Frontend application (React + TanStack Router)
-│   └── server/      # Backend API (Hono, ORPC)
+
+### Building & Deployment
+
+```bash
+# Create production build
+bun build
+
+# Start production server
+bun start
+
+# Build and start
+bun build && bun start
 ```
 
-## Available Scripts
+### Code Quality
 
-- `bun dev`: Start all applications in development mode
-- `bun build`: Build all applications
-- `bun dev:web`: Start only the web application
-- `bun dev:server`: Start only the server
-- `bun check-types`: Check TypeScript types across all apps
-- `bun check`: Run Biome formatting and linting
-- `cd apps/web && bun generate-pwa-assets`: Generate PWA assets
+```bash
+# Run Biome linter
+bun lint
+
+# Fix linting issues automatically
+bun lint:fix
+
+# Format code with Biome
+bun format
+
+# Run all checks
+bun validate
+```
+
+### Type Checking
+
+```bash
+# Check TypeScript types
+bun typecheck
+
+# Alias
+bun type-check
+```
+
+### Maintenance
+
+```bash
+# Clean build artifacts
+bun clean
+
+# Install git hooks
+bun prepare
+
+# Install dependencies
+bun install
+```
+
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create `.env.local` in project root:
+
+```env
+NODE_ENV=development
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-or-anon-key
+
+```
+
+## 👨‍💻 Development
+
+### Quality Checks
+
+**Before Committing**
+
+```bash
+# Run full validation
+bun validate
+
+# Fix auto-fixable issues
+bun lint:fix
+bun format
+
+# Type check
+bun typecheck
+```
+
+---
+
+## 🤝 Contributing
+
+### Workflow
+
+1. Fork repository
+2. Create feature branch: `git checkout -b feat/amazing-feature`
+3. Make changes following code style
+4. Run `bun validate`
+5. Commit: `git commit -m "feat: add amazing feature"`
+6. Push: `git push origin feat/amazing-feature`
+7. Create Pull Request
+
+### Before Submitting
+
+```bash
+# Validate everything
+bun validate
+
+# Fix issues
+bun lint:fix
+bun format
+
+# Type check
+bun typecheck
+
+# Build test
+bun build
+```
+
+---
